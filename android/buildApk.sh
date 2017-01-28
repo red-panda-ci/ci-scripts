@@ -2,7 +2,7 @@
 
 cd "$(dirname $0)/.."
 ciRootFolder="$(pwd)"
-cd "$(dirname $0)/../.."
+cd ".."
 appFolder=$(pwd)
 
 # Parse variables
