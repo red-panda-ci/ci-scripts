@@ -20,6 +20,14 @@ echo "done"
 
 # Check sdk version
 case "${sdkVersion}" in
+    "23.0.1")
+        dockerImageName="android-sdk:${sdkVersion}"
+        dockerImageFolder="android-sdk-${sdkVersion}"
+        ;;
+    "23.0.2")
+        dockerImageName="android-sdk:${sdkVersion}"
+        dockerImageFolder="android-sdk-${sdkVersion}"
+        ;;
     "23.0.3")
         dockerImageName="android-sdk:${sdkVersion}"
         dockerImageFolder="android-sdk-${sdkVersion}"
@@ -29,6 +37,8 @@ case "${sdkVersion}" in
         cat << EOF
 
 Available SDK:
+* 23.0.1
+* 23.0.2
 * 23.0.3
 EOF
 
@@ -50,7 +60,7 @@ fi
 buildTempFolder=/tmp/ci-scripts.${dockerImageFolder}.${RANDOM}
 mkdir -p ${buildTempFolder}/tools || exit 1
 cp tools/* ${buildTempFolder}/tools || exit 2
-cp ${dockerImageFoder}/Dockerfile ${buildTempFolder} || exit 3
+cp ${dockerImageFolder}/Dockerfile ${buildTempFolder} || exit 3
 cp ~/.android/debug.keystore ${buildTempFolder} || exit 4
 
 # Docker image build (container image files involved)
