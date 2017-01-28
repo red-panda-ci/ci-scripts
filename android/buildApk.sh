@@ -31,4 +31,4 @@ done
 docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments} || exit $?
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=docker/Dockerfile . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=gradlew . || exit $?

@@ -30,7 +30,7 @@ Then the script will do the follogint:
 
 The script uses the debug.keystore located in the ".android" folder of your home.
 
-You can run the script from the jenkins pipeline your CI / CD project like this:
+You can run the script from the jenkins pipeline your CI / CD project like in this example:
 
     $ cat Jenkinsfile
     #!groovy
@@ -38,11 +38,14 @@ You can run the script from the jenkins pipeline your CI / CD project like this:
     [...]
 
     node {
+        // Local checkout
+        checkout scm // 1)
+        sh 'git submodule update --init' // 2)
 
-        [...]
-
-        step ('Build APK') {
-            sh 'ci-scripts/android/buildApk --sdkVersion=23.0.3 --gradlewArguments="clean assembleDegub"'
+        // 
+        stage('Build APK') {
+            sh 'ci-scripts/android/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"' // 3)
+            archiveArtifacts artifacts: '**/apk/*-debug.apk', fingerprint: true // 4)
         }
 
         [...]
@@ -51,4 +54,10 @@ You can run the script from the jenkins pipeline your CI / CD project like this:
 
     [...]
 
-In this case you must have a "debug.keystore" in the ~/.android folder of the jenkins user
+You must have a "debug.keystore" in the ~/.android folder of the jenkins user.
+
+An explanation of the interesting points marked above:
+1) Checkout the principal code reporitory using SCM plugin
+2) Initialize and update all of the submodules, including this "ci-scrits"
+3) Build the APK, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug"
+4) Archive all of the resultant APK as artifacts of the jenkins build job
