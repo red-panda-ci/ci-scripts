@@ -13,7 +13,9 @@ The project add some develop and CI/CD common task to you project
 ## Android
 
 You can:
-* Build docker images with specific SDK version
+* Build docker images with specific SDK version. For now we have:
+  * 23.0.1
+  * 23.0.2
   * 23.0.3
 * Build APK's of your app with the docker image you choose
 
