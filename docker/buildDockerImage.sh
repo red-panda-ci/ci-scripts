@@ -22,6 +22,7 @@ echo "done"
 case "${sdkVersion}" in
     "23.0.3")
         dockerImageName="android-sdk:${sdkVersion}"
+        dockerImageFolder="android-sdk-${sdkVersion}"
         ;;
     *)
         echo "Unknown SDK version: ${sdkVersion}"
@@ -46,10 +47,10 @@ else
 fi
 
 # Prepare temporary resources
-buildTempFolder=/tmp/ci-scripts.${dockerImageName}.${RANDOM}
+buildTempFolder=/tmp/ci-scripts.${dockerImageFolder}.${RANDOM}
 mkdir -p ${buildTempFolder}/tools || exit 1
 cp tools/* ${buildTempFolder}/tools || exit 2
-cp ${dockerImageName}/Dockerfile ${buildTempFolder} || exit 3
+cp ${dockerImageFoder}/Dockerfile ${buildTempFolder} || exit 3
 cp ~/.android/debug.keystore ${buildTempFolder} || exit 4
 
 # Docker image build (container image files involved)
