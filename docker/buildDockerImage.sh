@@ -56,5 +56,5 @@ cp ~/.android/debug.keystore ${buildTempFolder} || exit 4
 docker build -t ${dockerImageName} ${buildTempFolder}
 
 # Remove temporary resources
-rm ${buildTempFolder}/tools/* ${buildTempFolder}/* || exit 5
+rm ${buildTempFolder}/tools/* ${buildTempFolder}/Dockerfile ${buildTempFolder}/debug.keystore || exit 5
 rmdir ${buildTempFolder}/tools ${buildTempFolder}|| exit 6
