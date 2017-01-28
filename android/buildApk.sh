@@ -28,7 +28,7 @@ done
 "${ciRootFolder}/docker/buildDockerImage.sh" --sdkVersion=$sdkVersion || exit $?
 
 # Execute gradlew task
-docker run --rm -t -v "${appFolder}/":/myApp:rw android-${sdkVersion} ./gradlew ${gradlewArguments} || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments} || exit $?
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw android-${sdkVersion} chown -R --reference=docker/Dockerfile . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=docker/Dockerfile . || exit $?
