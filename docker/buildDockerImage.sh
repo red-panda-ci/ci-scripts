@@ -21,7 +21,7 @@ echo "done"
 # Check sdk version
 case "${sdkVersion}" in
     "23.0.3")
-        dockerImageName="android-${sdkVersion}"
+        dockerImageName="android-sdk:${sdkVersion}"
         ;;
     *)
         echo "Unknown SDK version: ${sdkVersion}"
