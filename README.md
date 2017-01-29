@@ -8,6 +8,8 @@ Some CI/CD scripts
 
 ## Install and usage
 
+* Install git-promote gist as root https://gist.github.com/pedroamador/5b08104e0c128ee4e97acf15dd1f90db
+
 * Add the repository as submodule of your script
 
     $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts/common
