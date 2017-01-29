@@ -6,11 +6,9 @@ Usage:
 
 * Add the repository as submodule of your script
 
-    $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts 
+    $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts/common
 
 The project add some develop and CI/CD common task to you project
-
-## Android
 
 You can:
 * Build docker images with specific SDK version. For now we have:
@@ -19,10 +17,15 @@ You can:
   * 23.0.3
 * Build APK's of your app with the docker image you choose
 
-There is a script on the "android" folder called "buildApk.sh". You can build your apk using docker.
+There are some scripts under "bin" folder:
+
+## buildApk.sh
+
+Build your android APK using docker.
+
 Example:
 
-    $ ci-scripts/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"
+    $ ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"
 
 Then the script will do the follogint:
 * Build a docker image claled "android-23.0.3", using the Dockerfile located in ci-scripts/docker/android-23.0.3 folder.
@@ -44,7 +47,7 @@ You can run the script from the jenkins pipeline your CI / CD project like in th
 
         // 
         stage('Build APK') {
-            sh 'ci-scripts/android/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"' // 3)
+            sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"' // 3)
             archiveArtifacts artifacts: '**/apk/*-debug.apk', fingerprint: true // 4)
         }
 

@@ -2,7 +2,7 @@
 
 cd "$(dirname $0)/.."
 ciRootFolder="$(pwd)"
-cd ".."
+cd "../.."
 appFolder=$(pwd)
 
 # Parse variables
@@ -25,7 +25,7 @@ while [ $# -gt 0 ]; do
 done
 
 # Build docker image
-"${ciRootFolder}/docker/buildDockerImage.sh" --sdkVersion=$sdkVersion || exit $?
+"${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=$sdkVersion || exit $?
 
 # Execute gradlew task
 docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments} || exit $?
