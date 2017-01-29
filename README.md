@@ -1,25 +1,35 @@
 # ci-scripts
 
+## Introduction
+
 Some CI/CD scripts
 
-Usage:
+[TBD]
+
+## Install and usage
 
 * Add the repository as submodule of your script
 
     $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts/common
 
-The project add some develop and CI/CD common task to you project
+* Install script wrappers into your "versioned" ci-scripts/bin directory
+
+    $ ci-scripts/common/bin/install.sh
+    Install script wrappers:
+    ci-scripts_caller.sh.dist -> ../../bin/buildApk.sh
+
+The script add some develop and CI/CD common task to you project
 
 You can:
+* Build APK's of your app with the docker image you choose
 * Build docker images with specific SDK version. For now we have:
   * 23.0.1
   * 23.0.2
   * 23.0.3
-* Build APK's of your app with the docker image you choose
 
-There are some scripts under "bin" folder:
+There are some script wrapper under your "ci-scripts/bin" directory:
 
-## buildApk.sh
+### buildApk.sh
 
 Build your android APK using docker.
 
@@ -28,12 +38,12 @@ Example:
     $ ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"
 
 Then the script will do the follogint:
-* Build a docker image claled "android-23.0.3", using the Dockerfile located in ci-scripts/docker/android-23.0.3 folder.
+* Build a docker image claled "android-23.0.3", using the Dockerfile located in ci-scripts/common/docker/android-23.0.3 folder.
 * Run the gradlew task "clean assembleDebug" in a docker container with the "android-23.0.3" image base builded in the previous step. 
 
 The script uses the debug.keystore located in the ".android" folder of your home.
 
-You can run the script from the jenkins pipeline your CI / CD project like in this example:
+You can run the script from the Jenkins pipeline of your CI / CD project like this:
 
     $ cat Jenkinsfile
     #!groovy
@@ -61,6 +71,6 @@ You must have a "debug.keystore" in the ~/.android folder of the jenkins user.
 
 An explanation of the interesting points marked above:
 1) Checkout the principal code reporitory using SCM plugin
-2) Initialize and update all of the submodules, including this "ci-scrits"
-3) Build the APK, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug"
-4) Archive all of the resultant APK as artifacts of the jenkins build job
+2) Initialize and update all of the submodules, including this "ci-scrits/common"
+3) Build the APK with a container based on android-23.0.3 docker image, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug" command
+4) Archive all of the resultant APK files as artifacts of the jenkins build job
