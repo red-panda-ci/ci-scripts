@@ -20,6 +20,10 @@ echo "done"
 
 # Check sdk version
 case "${sdkVersion}" in
+    "22.0.1")
+        dockerImageName="android-sdk:${sdkVersion}"
+        dockerImageFolder="android-sdk-${sdkVersion}"
+        ;;
     "23.0.1")
         dockerImageName="android-sdk:${sdkVersion}"
         dockerImageFolder="android-sdk-${sdkVersion}"
@@ -37,6 +41,7 @@ case "${sdkVersion}" in
         cat << EOF
 
 Available SDK:
+* 22.0.1
 * 23.0.1
 * 23.0.2
 * 23.0.3
