@@ -1,22 +1,39 @@
 #!/bin/bash
 
+buildDockerImage="$(basename "$0" | sed -e 's/-/ /')"
+HELP="Usage: $buildDockerImage --sdkVersion=xx.y.z
+
+Build docker image with Android SDK tools xx.y.z and fastlane installed on it
+
+Options:
+  --sdk-version=xx.y.z        # build docker image called 'android-sdk:xx.y.z'
+  --help                      # prints this
+
+Examples:
+  $buildDockerIMage 23.0.3        # Build docer image called 'android-sdk:23.0.3'
+"
+
 cd "$(dirname $0)/../docker"
 
 # Parse variables
-echo -n "Parsing arguments..."
 sdkversion=""
+echo $1
 while [ $# -gt 0 ]; do
   case "$1" in
     --sdkVersion=*)
       sdkVersion="${1#*=}"
       ;;
+    --h|\?|--help)
+      echo "$HELP"
+      exit 0
+      ;;
     *)
-      printf " [ERROR] Invalid argument '$1 '\n"
+      printf 'ERROR: Unknown option: %s\n' "$1" >&2
+      echo "$HELP"
       exit 1
   esac
   shift
 done
-echo "done"
 
 # Check sdk version
 case "${sdkVersion}" in
@@ -38,15 +55,8 @@ case "${sdkVersion}" in
         ;;
     *)
         echo "Unknown SDK version: ${sdkVersion}"
-        cat << EOF
-
-Available SDK:
-* 22.0.1
-* 23.0.1
-* 23.0.2
-* 23.0.3
-EOF
-
+        echo
+        echo "$HELP"
         exit 1
         ;;
 esac

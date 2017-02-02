@@ -25,6 +25,7 @@ The script add some develop and CI/CD common task to you project
 You can:
 * Build APK's of your app with the docker image you choose
 * Build docker images with specific SDK version. For now we have:
+  * 22.0.1
   * 23.0.1
   * 23.0.2
   * 23.0.3
@@ -72,7 +73,7 @@ You can run the script from the Jenkins pipeline of your CI / CD project like th
 You must have a "debug.keystore" in the ~/.android folder of the jenkins user.
 
 An explanation of the interesting points marked above:
-1) Checkout the principal code reporitory using SCM plugin
-2) Initialize and update all of the submodules, including this "ci-scrits/common"
-3) Build the APK with a container based on android-23.0.3 docker image, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug" command
-4) Archive all of the resultant APK files as artifacts of the jenkins build job
+1. Checkout the principal code reporitory using SCM plugin
+2. Initialize and update all of the submodules, including this "ci-scrits/common"
+3. Build the APK with a container based on android-23.0.3 docker image, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug" command
+4. Archive all of the resultant APK files as artifacts of the jenkins build job
