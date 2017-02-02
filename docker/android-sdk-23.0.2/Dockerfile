@@ -18,7 +18,10 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # Install basics
 RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip && \
+    apt-get install -y git wget curl unzip make g++ ruby ruby-dev && \
+
+#FASTLANE
+    gem install fastlane -NV && \
 
 #ANDROID
 #JAVA

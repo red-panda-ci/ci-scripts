@@ -1,5 +1,19 @@
 #!/bin/bash
 
+buildApk="$(basename "$0" | sed -e 's/-/ /')"
+HELP="Usage: $buildApk --sdkVersion=xx.y.z --gradlewArguments='clean assembleBuild'
+
+Build docker image with Android SDK tools xx.y.z and fastlane installed on it
+
+Options:
+  --sdk-version=xx.y.z        # use sdk version xx.y.z
+  --gradlewArguments='...'    # use gradlew arguments '...'
+  --help                      # prints this
+
+Examples:
+  $buildDockerIMage --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuile'
+"
+
 cd "$(dirname $0)/.."
 ciRootFolder="$(pwd)"
 cd "../.."
@@ -17,9 +31,14 @@ while [ $# -gt 0 ]; do
     --gradlewArguments=*)
       gradlewArguments="${1#*=}"
       ;;
+    --h|\?|--help)
+      echo "$HELP"
+      exit 0
+      ;;
     *)
       printf " [ERROR] Invalid argument '$1 '\n"
-      exit 1
+      echo "$HELP"
+      exit 0
   esac
   shift
 done
