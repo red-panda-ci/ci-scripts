@@ -90,4 +90,4 @@ rv=$?
 # Restore permissions
 docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=gradlew . || exit $?
 
-return ${rv}
+exit ${rv}
