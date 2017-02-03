@@ -58,6 +58,9 @@ COPY tools /opt/tools
 RUN ["/opt/tools/android-accept-licenses.sh", "android update sdk --all --no-ui --filter platform-tools,tools,build-tools-23.0.1,android-23,extra-android-support,extra-android-m2repository,extra-google-m2repository"]
 RUN unzip ${ANDROID_HOME}/temp/*.zip -d ${ANDROID_HOME}
 
+# Add applivery plugin
+RUN fastlane add_plugin applivery &> /dev/null
+
 # Copy debug keystore
 COPY debug.keystore /root/.android
 
