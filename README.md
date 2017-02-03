@@ -36,13 +36,22 @@ There are some script wrapper under your "ci-scripts/bin" directory:
 
 Build your android APK using docker.
 
-Example:
+Examples:
 
     $ ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"
+    [...]
 
 Then the script will do the follogint:
-* Build a docker image claled "android-23.0.3", using the Dockerfile located in ci-scripts/common/docker/android-23.0.3 folder.
-* Run the gradlew task "clean assembleDebug" in a docker container with the "android-23.0.3" image base builded in the previous step. 
+* Build a docker image, if don't exists, called "android-23.0.3", using the Dockerfile located in ci-scripts/common/docker/android-23.0.3 folder.
+* Run the gradlew task "clean assembleDebug" in a docker container with the "android-23.0.3" image base builded in the previous step
+
+    $ ci-scripts/common/bin/buildApk.sh --sdkVersion=22.0.1 --lane="debug"
+    [...]
+
+Then the script will do the follogint:
+* Build a docker image, if don't exists, called "android-22.0.1", using the Dockerfile located in ci-scripts/common/docker/android-23.0.3 folder.
+* Run the gradlew task "fatlane debug" in a docker container with the "android-22.0.1" image base builded in the previous step.
+
 
 The script uses the debug.keystore located in the ".android" folder of your home.
 
@@ -60,7 +69,7 @@ You can run the script from the Jenkins pipeline of your CI / CD project like th
 
         // 
         stage('Build APK') {
-            sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"' // 3)
+            sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --lane="debug"' // 3)
             archiveArtifacts artifacts: '**/apk/*-debug.apk', fingerprint: true // 4)
         }
 
@@ -75,5 +84,5 @@ You must have a "debug.keystore" in the ~/.android folder of the jenkins user.
 An explanation of the interesting points marked above:
 1. Checkout the principal code reporitory using SCM plugin
 2. Initialize and update all of the submodules, including this "ci-scrits/common"
-3. Build the APK with a container based on android-23.0.3 docker image, using 23.0.3 sdk version, builded with "./gradlew clean assembleDebug" command
+3. Build the APK with a container based on android-23.0.3 docker image, using 23.0.3 sdk version, and execute the lane "debug"
 4. Archive all of the resultant APK files as artifacts of the jenkins build job

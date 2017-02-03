@@ -6,7 +6,7 @@ HELP="Usage: $buildDockerImage --sdkVersion=xx.y.z
 Build docker image with Android SDK tools xx.y.z and fastlane installed on it
 
 Options:
-  --sdk-version=xx.y.z        # build docker image called 'android-sdk:xx.y.z'
+  --sdkVersion=xx.y.z         # build docker image called 'android-sdk:xx.y.z'
   --help                      # prints this
 
 Examples:
