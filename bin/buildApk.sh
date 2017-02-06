@@ -76,6 +76,7 @@ else
   then
     # Execute gradlew task
     docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments}
+    rv=$?
   else
     echo "[ERROR]: you must specify --lane or --gradlewArguments option"
     echo
@@ -83,9 +84,6 @@ else
     exit 1
   fi
 fi
-"${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=$sdkVersion
-rv=$?
-
 
 # Restore permissions
 docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=gradlew . || exit $?
