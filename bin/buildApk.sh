@@ -1,7 +1,7 @@
 #!/bin/bash
 
 buildApk="$(basename "$0" | sed -e 's/-/ /')"
-HELP="Usage: $buildApk [options...]
+HELP="Usage: ${buildApk} [options...]
 
 Build docker image with Android SDK tools xx.y.z and fastlane installed on it
 
@@ -14,14 +14,14 @@ Options:
   --help                                    # prints this
 
 Examples:
-  $buildDockerIMage --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuile'  # build using gradle
-  $buildDockerIMage --sdkVersion=23.0.3 --lane='debug'                            # build using fastlane
+  ${buildApk} --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuile'  # build using gradle
+  ${buildApk} --sdkVersion=23.0.3 --lane='debug'                            # build using fastlane
 "
 
 cd "$(dirname $0)/.."
 ciRootFolder="$(pwd)"
 cd "../.."
-appFolder=$(pwd)
+appFolder="$(pwd)"
 
 # Parse variables
 gradlewArguments=""
@@ -39,48 +39,52 @@ while [ $# -gt 0 ]; do
       lane="${1#*=}"
       ;;
     --h|\?|--help)
-      echo "$HELP"
+      echo "${HELP}"
       exit 0
       ;;
     *)
       printf "[ERROR] Invalid argument '$1 '\n"
-      echo "$HELP"
+      echo "${HELP}"
       exit 0
   esac
   shift
 done
 
 # Build docker image
-if [ "$sdkVersion" == "" ]
+if [ "${sdkVersion}" == "" ]
 then
   echo "[ERORR]: you must specify --sdkVersion option"
   echo
-  echo "$HELP"
+  echo "${HELP}"
   exit 1
 fi
 
-if [ "$lane" != "" ]
+if [ "${lane}" != "" ]
 then
-  if [ "$gradlewArguments" != "" ]
+  if [ "${gradlewArguments}" != "" ]
   then
     echo "[ERROR]: Can't use --gradlewArguments and --lane'"
     echo
-    echo "$HELP"
+    echo "${HELP}"
     exit 1
   fi
+  # Build image
+  "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion="${sdkVersion}"
   # Execute lane
-  docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} fastlane ${lane}
+  docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:"${sdkVersion}" fastlane "${lane}"
   rv=$?
 else
-  if [ "$gradlewArguments" != "" ]
+  if [ "${gradlewArguments}" != "" ]
   then
+    # Build image
+    "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion="${sdkVersion}"
     # Execute gradlew task
-    docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments}
+    docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:"${sdkVersion}" ./gradlew "${gradlewArguments}"
     rv=$?
   else
     echo "[ERROR]: you must specify --lane or --gradlewArguments option"
     echo
-    echo "$HELP"
+    echo "${HELP}"
     exit 1
   fi
 fi
