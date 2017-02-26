@@ -1,0 +1,22 @@
+fastlane_version "2.13.0"
+
+default_platform :android
+
+platform :android do
+
+  desc "Generate develop build"
+  lane :develop do |options|
+    gradle(task:"clean")
+    gradle(task:"assembleDebug")
+  end
+  desc "Generate UAT build"
+  lane :quality do |options|
+    gradle(task:"clean")
+    gradle(task:"assembleDebug")
+  end
+  desc "Generate GA build"
+  lane :master do |options|
+    gradle(task:"clean")
+    gradle(task:"assembleDebug")
+  end
+end
