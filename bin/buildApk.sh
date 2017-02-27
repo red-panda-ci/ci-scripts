@@ -71,7 +71,7 @@ then
   # Build image
   "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
   # Execute lane
-  docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} fastlane ${lane}
+  docker run --rm -t -v "${appFolder}/":/myApp:rw ci-scripts:${sdkVersion} fastlane ${lane}
   rv=$?
 else
   if [ "${gradlewArguments}" != "" ]
@@ -79,7 +79,7 @@ else
     # Build image
     "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
     # Execute gradlew task
-    docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} ./gradlew ${gradlewArguments}
+    docker run --rm -t -v "${appFolder}/":/myApp:rw ci-scripts:${sdkVersion} ./gradlew ${gradlewArguments}
     rv=$?
   else
     echo "[ERROR]: you must specify --lane or --gradlewArguments option"
@@ -90,6 +90,6 @@ else
 fi
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw android-sdk:${sdkVersion} chown -R --reference=gradlew . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw ci-scripts:${sdkVersion} chown -R --reference=gradlew . || exit $?
 
 exit ${rv}
