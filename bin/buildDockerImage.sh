@@ -53,6 +53,10 @@ case "${sdkVersion}" in
         dockerImageName="android-sdk:${sdkVersion}"
         dockerImageFolder="android-sdk-${sdkVersion}"
         ;;
+    "25.0.0")
+        dockerImageName="android-sdk:${sdkVersion}"
+        dockerImageFolder="android-sdk-${sdkVersion}"
+        ;;
     "25.0.2")
         dockerImageName="android-sdk:${sdkVersion}"
         dockerImageFolder="android-sdk-${sdkVersion}"
