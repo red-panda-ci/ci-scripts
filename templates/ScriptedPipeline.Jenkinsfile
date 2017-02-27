@@ -57,7 +57,7 @@ try {
         if (env.BRANCH_NAME.startsWith("release")) {
             node ('master') {
                 sh "${gitPromote} -m 'Merge from quality with Jenkins' quality master"
-                build job: 'quality'
+                build job: 'master'
             }
         }
     }
