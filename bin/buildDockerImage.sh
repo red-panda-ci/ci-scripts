@@ -53,9 +53,6 @@ else
     fi
 fi
 
-echo "Docker image name: $dockerImageName"
-echo "Docker image folder: $dockerImageFolder"
-
 # Check user home debug.keystore
 echo -n "Searching for .android/debug.keystore file..."
 if [ -f ../../../.android/debug.keystore ]
@@ -74,7 +71,11 @@ else
 fi
 
 # Prepare temporary resources
-buildTempFolder=/tmp/ci-scripts.${dockerImageFolder}.${RANDOM}
+buildTempFolder=/tmp/ci-scripts.${sdkVersion}.${RANDOM}
+echo "Building docker image"
+echo "- Docker image name...: ${dockerImageName}"
+echo "- Docker image folder.: ${dockerImageFolder}"
+echo "- Build temp folder...: ${buildTempFolder}"
 mkdir -p ${buildTempFolder}/tools ${buildTempFolder}/.android || exit 1
 cp tools/* ${buildTempFolder}/tools || exit 2
 cp ${dockerImageFolder}/Dockerfile ${buildTempFolder} || exit 3
