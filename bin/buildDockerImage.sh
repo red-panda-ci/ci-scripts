@@ -60,12 +60,12 @@ echo "Docker image folder: $dockerImageFolder"
 echo -n "Searching for .android/debug.keystore file..."
 if [ -f ../../../.android/debug.keystore ]
 then
-    androidFolder="../../../.android"
+    androidFolder=../../../.android
     echo " found in project. Use '.android' of root project folder"
 else
     if [ -f ~/.android/debug.keystore ]
     then
-        androidFolder="~/.android"
+        androidFolder=~/.android
         echo " found global. Use global '~/.android' of the user home folder"
     else
         echo " not found. Can't continue"
@@ -78,7 +78,7 @@ buildTempFolder=/tmp/ci-scripts.${dockerImageFolder}.${RANDOM}
 mkdir -p ${buildTempFolder}/tools ${buildTempFolder}/.android || exit 1
 cp tools/* ${buildTempFolder}/tools || exit 2
 cp ${dockerImageFolder}/Dockerfile ${buildTempFolder} || exit 3
-cp ${androidFolder}/* ${buildTempFolder}/.android/ || exit 4
+cp ${androidFolder}/* ${buildTempFolder}/.android/ 2> /dev/null || :
 
 # Docker image build (container image files involved)
 docker build -t ${dockerImageName} ${buildTempFolder}
