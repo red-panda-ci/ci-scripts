@@ -62,7 +62,7 @@ RUN unzip ${ANDROID_HOME}/temp/*.zip -d ${ANDROID_HOME}
 RUN fastlane add_plugin applivery &> /dev/null
 
 # Copy debug keystore
-COPY debug.keystore /root/.android
+COPY .android/ /root/.android/
 
 # Exec
 WORKDIR myApp
