@@ -6,11 +6,11 @@ HELP="Usage: $buildDockerImage --sdkVersion=xx.y.z
 Build docker image with Android SDK tools xx.y.z and fastlane installed on it
 
 Options:
-  --sdkVersion=xx.y.z         # build docker image called 'android-sdk:xx.y.z'
+  --sdkVersion=xx.y.z         # build docker image called 'ci-scripts:xx.y.z'
   --help                      # prints this
 
 Examples:
-  $buildDockerIMage 23.0.3        # Build docer image called 'android-sdk:23.0.3'
+  $buildDockerIMage 23.0.3        # Build docer image called 'ci-scripts:23.0.3'
 "
 
 cd "$(dirname $0)/../docker"
@@ -36,59 +36,54 @@ while [ $# -gt 0 ]; do
 done
 
 # Check sdk version
-case "${sdkVersion}" in
-    "22.0.1")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    "23.0.1")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    "23.0.2")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    "23.0.3")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    "25.0.0")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    "25.0.2")
-        dockerImageName="android-sdk:${sdkVersion}"
-        dockerImageFolder="android-sdk-${sdkVersion}"
-        ;;
-    *)
+if [ -f android-sdk-${sdkVersion}/Dockerfile ]
+then
+    dockerImageName="ci-scripts:${sdkVersion}"
+    dockerImageFolder="android-sdk-${sdkVersion}"
+else
+    if [ -f ../../docker/${sdkVersion}/Dockerfile ]
+    then
+        dockerImageName="ci-scripts:${sdkVersion}"
+        dockerImageFolder="../../docker/${sdkVersion}"
+    else
         echo "Unknown SDK version: ${sdkVersion}"
         echo
         echo "$HELP"
         exit 1
-        ;;
-esac
+    fi
+fi
 
 # Check user home debug.keystore
-echo -n "~/.android/debug.keystore "
-if [ -f ~/.android/debug.keystore ]
+echo -n "Searching for .android/debug.keystore file..."
+if [ -f ../../../.android/debug.keystore ]
 then
-    echo "found"
+    androidFolder=../../../.android
+    echo " found in project. Use '.android' of root project folder"
 else
-    echo "not found. Can't continue"
-    exit 1
+    if [ -f ~/.android/debug.keystore ]
+    then
+        androidFolder=~/.android
+        echo " found global. Use global '~/.android' of the user home folder"
+    else
+        echo " not found. Can't continue"
+        exit 1
+    fi
 fi
 
 # Prepare temporary resources
-buildTempFolder=/tmp/ci-scripts.${dockerImageFolder}.${RANDOM}
-mkdir -p ${buildTempFolder}/tools || exit 1
+buildTempFolder=/tmp/ci-scripts.${sdkVersion}.${RANDOM}
+echo "Building docker image"
+echo "- Docker image name...: ${dockerImageName}"
+echo "- Docker image folder.: ${dockerImageFolder}"
+echo "- Build temp folder...: ${buildTempFolder}"
+mkdir -p ${buildTempFolder}/tools ${buildTempFolder}/.android || exit 1
 cp tools/* ${buildTempFolder}/tools || exit 2
 cp ${dockerImageFolder}/Dockerfile ${buildTempFolder} || exit 3
-cp ~/.android/debug.keystore ${buildTempFolder} || exit 4
+cp ${androidFolder}/* ${buildTempFolder}/.android/ 2> /dev/null || :
 
 # Docker image build (container image files involved)
 docker build -t ${dockerImageName} ${buildTempFolder}
 
 # Remove temporary resources
-rm ${buildTempFolder}/tools/* ${buildTempFolder}/Dockerfile ${buildTempFolder}/debug.keystore || exit 5
-rmdir ${buildTempFolder}/tools ${buildTempFolder}|| exit 6
+rm ${buildTempFolder}/tools/* ${buildTempFolder}/.android/* ${buildTempFolder}/Dockerfile || exit 5
+rmdir ${buildTempFolder}/tools ${buildTempFolder}/.android ${buildTempFolder}|| exit 6
