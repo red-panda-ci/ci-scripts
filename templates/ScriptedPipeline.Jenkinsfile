@@ -24,7 +24,7 @@ try {
         if ((env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-')) {
             node('docker') {
                 wrap([$class: 'AnsiColorBuildWrapper']) {
-                    def sonarHome = tool 'SonarQube Scanner 2.8';
+                    def sonarHome = tool 'SonarQube';
                     withSonarQubeEnv('SonarQube') {
                             sh "${sonarHome}/bin/sonar-scanner"
                     }
