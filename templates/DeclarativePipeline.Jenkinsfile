@@ -28,7 +28,7 @@ pipeline {
             steps {
                 wrap ([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
                     script {
-                        def sonarHome = tool 'SonarQube Scanner 2.8';
+                        def sonarHome = tool 'SonarQube';
                         withSonarQubeEnv('SonarQube') {
                             sh "${sonarHome}/bin/sonar-scanner"
                         }
