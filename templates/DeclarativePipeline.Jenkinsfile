@@ -4,7 +4,7 @@
 def sdkVersion = "23.0.3"
 def gitPromote = "wget -O - https://raw.githubusercontent.com/pedroamador/git-promote/master/git-promote | bash -s -- "
 def to = emailextrecipients([[$class: 'DevelopersRecipientProvider'],[$class: 'CulpritsRecipientProvider'],[$class: 'UpstreamComitterRecipientProvider'],[$class: 'FirstFailingBuildSuspectsRecipientProvider'],[$class: 'FailingTestSuspectsRecipientProvider']])
-def lane = (env.BRANCH_NAME in ['develop','quality','master'] ? env.BRANCH_NAME : 'develop')
+def lane = (env.BRANCH_NAME in ['develop','staging','quality','master'] ? env.BRANCH_NAME : 'develop')
 
 pipeline {
     agent none
@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage ('Build') {
             agent { label 'docker' }
-            when { expression { (env.BRANCH_NAME in ['develop','quality','master'] || env.BRANCH_NAME.startsWith('PR-')) ? true : false } }
+            when { expression { (env.BRANCH_NAME in ['develop','staging','quality','master'] || env.BRANCH_NAME.startsWith('PR-')) ? true : false } }
             steps  {
                 wrap ([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
                     checkout scm
