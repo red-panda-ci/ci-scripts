@@ -71,7 +71,7 @@ then
   # Build image
   "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
   # Execute lane
-  docker run --rm -t -v "${appFolder}/":/myApp:rw ci-scripts:${sdkVersion} fastlane ${lane}
+  docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:${sdkVersion} fastlane ${lane}
   rv=$?
 else
   if [ "${gradlewArguments}" != "" ]
