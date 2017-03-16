@@ -18,8 +18,14 @@ pipeline {
                     checkout scm
                     sh 'git submodule update --init'
                     sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
-                    archive '**/*.apk'
                 }
+            }
+        }
+        stage ('Archive artifacts') {
+            agent { label 'docker' }
+            when { expression { env.BRANCH_NAME in ['develop','staging','quality','master'] ? true : false } }
+            steps {
+                archive '**/*.apk'
             }
         }
         stage('Sonarqube Analysis') {
@@ -28,9 +34,15 @@ pipeline {
             steps {
                 wrap ([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
                     script {
-                        def sonarHome = tool 'SonarQube';
-                        withSonarQubeEnv('SonarQube') {
-                            sh "${sonarHome}/bin/sonar-scanner"
+                        def sonarHome = tool 'SonarQube'
+                        timeout(time: 1, unit: 'HOURS') {
+                            withSonarQubeEnv('SonarQube') {
+                                sh "${sonarHome}/bin/sonar-scanner"
+                            }
+                            def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                            }
                         }
                     }
                 }
@@ -96,6 +108,13 @@ pipeline {
                 sh 'git push origin :' + env.BRANCH_NAME
             }
         }
+        stage ('Clean') {
+            when { expression { env.BRANCH_NAME.startsWith('PR-') ? true : false } }
+            agent { label 'docker' }
+            steps {
+                deleteDir();
+            }
+        }
     }
 
     post {
@@ -103,10 +122,12 @@ pipeline {
             echo 'Pipeline finished'
         }
         success {
-            echo 'Success build'
+            hipchatSend color: 'GREEN', failOnError: true, room: 'Integrations,Project', message: "Build #${env.BUILD_NUMBER} finished OK (branch ${env.BRANCH_NAME})", notify: true, server: 'api.hipchat.com', v2enabled: true
+            slackSend channel: '#integrations', color: 'good', message: "Build #${env.BUILD_NUMBER} finished OK (branch ${env.BRANCH_NAME})"
         }
         failure {
-            echo 'Failed build'
+            hipchatSend color: 'RED', failOnError: true, room: 'Integrations,Project', message: "K.O. in the Build #${env.BUILD_NUMBER} (branch ${env.BRANCH_NAME})", notify: true, server: 'api.hipchat.com', v2enabled: true
+            slackSend channel: '#integrations', color: 'danger', message: "K.O. in the Build #${env.BUILD_NUMBER} (branch ${env.BRANCH_NAME})"
             mail to: to, cc: "your_address@example.com", subject: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] finished with ${currentBuild.result}", body: "See ${env.BUILD_URL}/console"
         }
     }

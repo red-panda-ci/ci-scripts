@@ -15,8 +15,14 @@ try {
                     checkout scm
                     sh 'git submodule update --init'
                     sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
-                    archiveArtifacts artifacts: '**/*.apk', fingerprint: true
                 }
+            }
+        }
+    }
+    stage ('Archive artifacts') {
+        if (env.BRANCH_NAME in ['develop','staging','quality','master']) {
+            node('docker') {
+                archive '**/*.apk'
             }
         }
     }
@@ -24,9 +30,15 @@ try {
         if ((env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-')) {
             node('docker') {
                 wrap([$class: 'AnsiColorBuildWrapper']) {
-                    def sonarHome = tool 'SonarQube';
-                    withSonarQubeEnv('SonarQube') {
+                    def sonarHome = tool 'SonarQube'
+                    timeout(time: 1, unit: 'HOURS') {
+                        withSonarQubeEnv('SonarQube') {
                             sh "${sonarHome}/bin/sonar-scanner"
+                        }
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
                     }
                 }
             }
@@ -91,6 +103,8 @@ try {
 } catch (e) {
     currentBuild.result = 'FAILED'
     node {
+        hipchatSend color: 'RED', failOnError: true, room: 'Integrations,Project', message: "K.O. in the Build #${env.BUILD_NUMBER} (branch ${env.BRANCH_NAME})", notify: true, server: 'api.hipchat.com', v2enabled: true
+        slackSend channel: '#integrations', color: 'danger', message: "K.O. in the Build #${env.BUILD_NUMBER} (branch ${env.BRANCH_NAME})"
         mail to: to, cc: "your_address@example.com", subject: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] finished with ${currentBuild.result}", body: "See ${env.BUILD_URL}/console"
     }
     throw e
