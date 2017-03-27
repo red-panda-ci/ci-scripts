@@ -80,7 +80,7 @@ $ ci-scripts/common/bin/buildApk.sh --sdkVersion="mydocker" --lane="debug"
 
 Then the script will do the folloging:
 * Build a docker image, if don't exists, called "customimage", using the Dockerfile located in ci-scripts/docker/customimage folder.
-* Run the gradlew task "fatlane debug" in a docker container with the "customimage" image base builded in the previous step.
+* Use Fastlane with "debug" lane to build the APK in a docker container with the "customimage" image base builded in the previous step.
 
 The script uses the debug.keystore located in the ".android" folder of your home.
 
