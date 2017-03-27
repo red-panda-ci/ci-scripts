@@ -64,23 +64,23 @@ Build your android APK using docker.
 Examples:
 
 ```
-$ ci-scripts/common/bin/buildApk.sh --sdkVersion=23.0.3 --gradlewArguments="clean assembleDebug"
+$ ci-scripts/common/bin/buildApk.sh --sdkVersion=25.0.2 --gradlewArguments="clean assembleDebug"
 [...]
 ```
 
 Then the script will do the folloging:
 
-* Build a docker image, if don't exists, called "ci-scripts:23.0.3", using the Dockerfile located in ci-scripts/common/docker/ci-scripts:23.0.3 folder.
-* Run the gradlew task "clean assembleDebug" in a docker container with the "ci-scripts:23.0.3" image base builded in the previous step.
+* Build a docker image, if don't exists, called "ci-scripts:25.0.2", using the Dockerfile located in ci-scripts/common/docker/android-sdk-25.0.2 folder.
+* Run the gradlew task "clean assembleDebug" in a docker container with the "ci-scripts:25.0.2" image base builded in the previous step.
 
 ```
-$ ci-scripts/common/bin/buildApk.sh --sdkVersion=25.0.2 --lane="debug"
+$ ci-scripts/common/bin/buildApk.sh --sdkVersion="mydocker" --lane="debug"
 [...]
 ```
 
 Then the script will do the folloging:
-* Build a docker image, if don't exists, called "ci-scripts:25.0.2", using the Dockerfile located in ci-scripts/common/docker/ci-scripts:25.0.2 folder.
-* Run the gradlew task "fatlane debug" in a docker container with the "ci-scripts:25.0.2" image base builded in the previous step.
+* Build a docker image, if don't exists, called "customimage", using the Dockerfile located in ci-scripts/docker/customimage folder.
+* Run the gradlew task "fatlane debug" in a docker container with the "customimage" image base builded in the previous step.
 
 The script uses the debug.keystore located in the ".android" folder of your home.
 
