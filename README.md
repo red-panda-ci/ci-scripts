@@ -2,11 +2,11 @@
 
 Some CI/CD scripts
 
-## Introduction
+## Introduction
 
 [TBD]
 
-## Install and usage
+## Install and usage
 
 * Install git-promote gist as root https://gist.github.com/pedroamador/5b08104e0c128ee4e97acf15dd1f90db
 
@@ -102,7 +102,7 @@ pipeline {
             steps  {
                 checkout scm                                                                # 3)
                 sh 'git submodule update --init'                                            # 4)
-                sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=25.0.2 --lane="develop"' # 4)
+                sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=25.0.2 --lane="develop"' # 4)
                 archive '**/*.apk'                                                          # 6)
             }
         }
