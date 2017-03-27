@@ -1,6 +1,6 @@
 # Repo details: https://github.com/pedroamador/ci-scripts
 #
-# Build android-sdk:23.0.3 docker image with "ci-scripts/docker/buildDockerImage.sh 23.0.1" from the root path
+# Build ci-scripts:23.0.1 docker image with "bin/buildDockerImage.sh --sdkVersion=23.0.1" from the root path
 # 
 FROM     ubuntu:16.04
 MAINTAINER pedroamador [dot] rodriguez [at] gmail [dot] com
