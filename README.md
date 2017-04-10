@@ -49,6 +49,7 @@ fastlane/README.md
 You can:
 
 * Build docker images with specific SDK version, with "all-in" (Android SDK, Android Build tools, Fastlane). For now we have:
+  * 21.1.2
   * 22.0.1
   * 23.0.1
   * 23.0.2
