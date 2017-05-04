@@ -5,6 +5,11 @@
 FROM     ubuntu:16.04
 MAINTAINER pedroamador [dot] rodriguez [at] gmail [dot] com
 
+# Install basics
+RUN apt-get update &&  \
+    apt-get install -y apt-utils && \
+    apt-get install -y git wget curl unzip make g++ ruby ruby-dev locales
+
 # Locale settings
 RUN locale-gen en_US.UTF-8
 
@@ -16,33 +21,29 @@ ENV LANG=en_US.UTF-8 \
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux
 
-# Install basics
-RUN apt-get update &&  \
-    apt-get install -y git wget curl unzip make g++ ruby ruby-dev && \
-
 #FASTLANE
-    gem install fastlane -NV && \
+RUN gem install fastlane -NV
 
 #ANDROID
 #JAVA
 
 # install python-software-properties (so you can do add-apt-repository)
-    apt-get install -y -q python-software-properties software-properties-common  && \
+RUN apt-get install -y -q python-software-properties software-properties-common  && \
     add-apt-repository ppa:webupd8team/java -y && \
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get update && apt-get -y install oracle-java8-installer && \
+    apt-get update && apt-get -y install oracle-java8-installer
 
 # ANDROID STUFF
-    echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
+RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y --force-yes expect ant wget libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 qemu-kvm kmod && \
     apt-get clean && \
     apt-get autoclean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Android SDK
-    cd /opt && \
+RUN cd /opt && \
     wget --output-document=android-sdk.tgz --quiet http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz && \
     tar xzf android-sdk.tgz && \
     rm -f android-sdk.tgz && \
