@@ -14,9 +14,13 @@ pipeline {
             agent { label 'docker' }
             when { expression { (env.BRANCH_NAME in ['develop','staging','quality','master'] || env.BRANCH_NAME.startsWith('PR-')) ? true : false } }
             steps  {
-                checkout scm
-                sh 'git submodule update --init'
-                sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
+                timestamps {
+                    ansiColor('xterm') {
+                        checkout scm
+                        sh 'git submodule update --init'
+                        sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
+                    }
+                }
             }
         }
         stage ('Archive artifacts') {
@@ -69,15 +73,18 @@ pipeline {
             agent { label 'master' }
             when { branch 'release/*' }
             steps {
-                // Archive artifacts from other jobs/branches
-                step ([$class: 'CopyArtifact', projectName: 'staging', filter: '**/*.apk', target: 'staging'])
-                step ([$class: 'CopyArtifact', projectName: 'quality', filter: '**/*.apk', target: 'quality'])
-                step ([$class: 'CopyArtifact', projectName: 'master', filter: '**/*.apk', target: 'master'])
-                archive '**/*.apk'
-                // ToDo: Release to Play Store
-                echo 'Mock: Release to Play Store'
-                jplCloseRelease()
-                jplNotify('The-Project','#the-project','the-project@example.com')
+                timestamps {
+                    ansiColor('xterm') {
+                        // Archive artifacts from other jobs/branches
+                        step ([$class: 'CopyArtifact', projectName: 'staging', filter: '**/*.apk', target: 'staging'])
+                        step ([$class: 'CopyArtifact', projectName: 'quality', filter: '**/*.apk', target: 'quality'])
+                        step ([$class: 'CopyArtifact', projectName: 'master', filter: '**/*.apk', target: 'master'])
+                        archive '**/*.apk'
+                        // ToDo: Release to Play Store
+                        jplCloseRelease()
+                        jplNotify('The-Project','#the-project','the-project@example.com')
+                    }
+                }
             }
         }
         stage ('Clean') {
