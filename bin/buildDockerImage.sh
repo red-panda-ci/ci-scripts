@@ -86,4 +86,4 @@ docker build -t ${dockerImageName} ${buildTempFolder}
 
 # Remove temporary resources
 rm ${buildTempFolder}/tools/* ${buildTempFolder}/.android/* ${buildTempFolder}/Dockerfile || exit 5
-rmdir ${buildTempFolder}/tools ${buildTempFolder}/.android ${buildTempFolder}|| exit 6
+rmdir ${buildTempFolder}/tools ${buildTempFolder}/.android ${buildTempFolder} || exit 6

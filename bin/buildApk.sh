@@ -69,7 +69,7 @@ then
     exit 1
   fi
   # Build image
-  "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
+  "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion} || exit $?
   # Execute lane
   docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:${sdkVersion} fastlane ${lane}
   rv=$?

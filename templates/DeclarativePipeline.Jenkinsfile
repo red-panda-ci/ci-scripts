@@ -12,27 +12,26 @@ pipeline {
     stages {
         stage ('Build') {
             agent { label 'docker' }
-            when { expression { (env.BRANCH_NAME in ['develop','staging','quality','master'] || env.BRANCH_NAME.startsWith('PR-')) ? true : false } }
+            when { expression { (env.BRANCH_NAME in ['develop','staging','quality','master']) || env.BRANCH_NAME.startsWith('PR-') } }
             steps  {
                 timestamps {
                     ansiColor('xterm') {
                         checkout scm
-                        sh 'git submodule update --init'
-                        sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
+                        sh 'git submodule update --init && ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane=' + lane
                     }
                 }
             }
         }
         stage ('Archive artifacts') {
             agent { label 'docker' }
-            when { expression { env.BRANCH_NAME in ['develop','staging','quality','master'] ? true : false } }
+            when { expression { env.BRANCH_NAME in ['develop','staging','quality','master'] } }
             steps {
                 archive '**/*.apk'
             }
         }
         stage('Sonarqube Analysis') {
             agent { label 'docker' }
-            when { expression { ((env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-')) ? true : false } }
+            when { expression { (env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-') } }
             steps {
                 jplSonarScanner ('SonarQube')
             }
@@ -88,7 +87,7 @@ pipeline {
             }
         }
         stage ('Clean') {
-            when { expression { env.BRANCH_NAME.startsWith('PR-') ? true : false } }
+            when { expression { env.BRANCH_NAME.startsWith('PR-') } }
             agent { label 'docker' }
             steps {
                 deleteDir();
