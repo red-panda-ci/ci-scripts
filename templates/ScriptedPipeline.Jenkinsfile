@@ -14,8 +14,7 @@ try {
                 timestamps {
                     ansiColor('xterm') {
                         checkout scm
-                        sh 'git submodule update --init'
-                        sh 'ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane="' + lane + '"'
+                        sh 'git submodule update --init && ci-scripts/common/bin/buildApk.sh --sdkVersion=' + sdkVersion + ' --lane=' + lane
                     }
                 }
             }
