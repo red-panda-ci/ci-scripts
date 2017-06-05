@@ -9,13 +9,14 @@ Options:
   --sdkVersion=xx.y.z                       # use sdk version xx.y.z (mandatory)
   --lane='lane_name'                        # use fastlane with lane 'lane_name'
                                             # Can't use with '--gradlewArguments'
+  --notes='notes'                           # Notes for the buid, for use with --lane option
   --gradlewArguments='gradlew arguments'    # build with gradle, using arguments 'gradlew arguments'
                                             # Can't use with '--lane'
   --help                                    # prints this
 
 Examples:
   ${buildApk} --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuile'  # build using gradle
-  ${buildApk} --sdkVersion=23.0.3 --lane='debug'                            # build using fastlane
+  ${buildApk} --sdkVersion=23.0.3 --lane='debug' --notes='develop RC-1'     # build using fastlane
 "
 
 cd "$(dirname $0)/.."
@@ -27,6 +28,7 @@ appFolder="$(pwd)"
 gradlewArguments=""
 lane=""
 sdkversion=""
+notes=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --sdkVersion=*)
@@ -37,6 +39,9 @@ while [ $# -gt 0 ]; do
       ;;
     --lane=*)
       lane="${1#*=}"
+      ;;
+    --notes=*)
+      notes="${1#*=}"
       ;;
     --h|\?|--help)
       echo "${HELP}"
@@ -71,7 +76,7 @@ then
   # Build image
   "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion} || exit $?
   # Execute lane
-  docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:${sdkVersion} fastlane ${lane}
+  docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" fastlane "${lane}" notes:"${notes}"
   rv=$?
 else
   if [ "${gradlewArguments}" != "" ]
@@ -79,7 +84,7 @@ else
     # Build image
     "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
     # Execute gradlew task
-    docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:${sdkVersion} ./gradlew ${gradlewArguments}
+    docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" ./gradlew "${gradlewArguments}"
     rv=$?
   else
     echo "[ERROR]: you must specify --lane or --gradlewArguments option"
@@ -90,6 +95,6 @@ else
 fi
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:${sdkVersion} chown -R --reference=gradlew . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" chown -R --reference=gradlew . || exit $?
 
 exit ${rv}
