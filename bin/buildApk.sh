@@ -15,7 +15,7 @@ Options:
   --help                                    # prints this
 
 Examples:
-  ${buildApk} --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuile'  # build using gradle
+  ${buildApk} --sdkVersion=23.0.3 --gradlewArguments='clean assembleBuild'  # build using gradle
   ${buildApk} --sdkVersion=23.0.3 --lane='debug' --notes='develop RC-1'     # build using fastlane
 "
 
@@ -76,7 +76,7 @@ then
   # Build image
   "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion} || exit $?
   # Execute lane
-  docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" fastlane "${lane}" notes:"${notes}"
+  docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" fastlane "${lane}" notes:"${notes}"
   rv=$?
 else
   if [ "${gradlewArguments}" != "" ]
@@ -84,7 +84,7 @@ else
     # Build image
     "${ciRootFolder}/bin/buildDockerImage.sh" --sdkVersion=${sdkVersion}
     # Execute gradlew task
-    docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" ./gradlew "${gradlewArguments}"
+    docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" ./gradlew ${gradlewArguments}
     rv=$?
   else
     echo "[ERROR]: you must specify --lane or --gradlewArguments option"
@@ -95,6 +95,6 @@ else
 fi
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "ci-scripts:${sdkVersion}" chown -R --reference=gradlew . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" chown -R --reference=gradlew . || exit $?
 
 exit ${rv}
