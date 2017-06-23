@@ -29,7 +29,7 @@ RUN apt-get -y update && \
     apt-get update && \
     apt-get -y install oracle-java8-installer && \
     apt-get -y install git wget curl unzip make g++ ruby ruby-dev locales libqt5widgets5 && \
-    apt-get -y install unzip
+    apt-get -y install unzip sudo
 
 RUN echo ANDROID_HOME="${ANDROID_HOME}" >> /etc/environment && \
     dpkg --add-architecture i386 && \
@@ -69,3 +69,8 @@ RUN gem install fastlane -NV && \
     mkdir /.gem && \
     chmod 777 /.gem && \
     chmod 777 -R /var/lib/gems/2.3.0
+
+# Prepare for android emulator
+RUN chmod +x /usr/local/android-sdk/tools/android && \
+    chmod 777 /etc/passwd &&
+    echo "ALL    ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
