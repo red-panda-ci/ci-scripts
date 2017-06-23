@@ -72,5 +72,8 @@ RUN gem install fastlane -NV && \
 
 # Prepare for android emulator
 RUN chmod +x /usr/local/android-sdk/tools/android && \
+    chmod +x /usr/local/android-sdk/tools/emulator64-x86 && \
+    mkdir /var/lib/jenkins && \
+    chmod 777 /var/lib/jenkins && \
     chmod 777 /etc/passwd && \
     echo 'ALL    ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
