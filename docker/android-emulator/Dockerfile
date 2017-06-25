@@ -65,15 +65,7 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 # FASTLANE STUFF
-RUN gem install fastlane -NV && \
-    mkdir /.gem && \
-    chmod 777 /.gem && \
-    chmod 777 -R /var/lib/gems/2.3.0
+RUN gem install fastlane -NV
 
-# Prepare for android emulator
-RUN chmod +x /usr/local/android-sdk/tools/android && \
-    chmod +x /usr/local/android-sdk/tools/emulator64-x86 && \
-    mkdir /var/lib/jenkins && \
-    chmod 777 /var/lib/jenkins && \
-    chmod 777 /etc/passwd && \
-    echo 'ALL    ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Work directory
+WORKDIR /myApp
