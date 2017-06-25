@@ -36,20 +36,28 @@ while [ $# -gt 0 ]; do
 done
 
 # Check sdk version
-if [ -f android-sdk-${sdkVersion}/Dockerfile ]
+if [ -f ../../../Dockerfile.tail ]
 then
+    cp -p android-emulator/Dockerfile ../../..
+    cat ../../../Dockerfile.tail >> ../../../Dockerfile
     dockerImageName="ci-scripts:${sdkVersion}"
-    dockerImageFolder="android-sdk-${sdkVersion}"
+    dockerImageFolder="../../.."
 else
     if [ -f ../../docker/${sdkVersion}/Dockerfile ]
     then
         dockerImageName="ci-scripts:${sdkVersion}"
         dockerImageFolder="../../docker/${sdkVersion}"
     else
-        echo "Unknown SDK version: ${sdkVersion}"
-        echo
-        echo "$HELP"
-        exit 1
+        if [ -f android-sdk-${sdkVersion}/Dockerfile ]
+        then
+            dockerImageName="ci-scripts:${sdkVersion}"
+            dockerImageFolder="android-sdk-${sdkVersion}"
+        else
+            echo "Unknown SDK version: ${sdkVersion}"
+            echo
+            echo "$HELP"
+            exit 1
+        fi
     fi
 fi
 
