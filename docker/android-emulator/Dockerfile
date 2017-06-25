@@ -49,7 +49,7 @@ RUN wget -qO- http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz | \
 RUN ( sleep 4 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --force -a --filter \
     platform-tool,android-23,build-tools-23.0.3,sys-img-armeabi-v7a-google_apis-23,sys-img-x86-google_apis-23,tools,extra-android-support,extra-android-m2repository,extra-google-m2repository
 
-RUN [ -e ${ANDROID_HOME}/temp/*.zip ] && unzip ${ANDROID_HOME}/temp/*.zip -d ${ANDROID_HOME} || echo "No unzip"
+RUN [ -e ${ANDROID_HOME}/temp/*.zip ] && unzip ${ANDROID_HOME}/temp/*.zip -d ${ANDROID_HOME} && rm ${ANDROID_HOME}/temp/*.zip || echo "No unzip"
 
 RUN echo "y" | android update adb
 
