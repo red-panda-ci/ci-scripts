@@ -102,6 +102,6 @@ else
 fi
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" chown -R --reference="${appFolder}/Jenkinsfile" . || exit $?
+docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" chown -R --reference=Jenkinsfile . || exit $?
 
 exit ${rv}
