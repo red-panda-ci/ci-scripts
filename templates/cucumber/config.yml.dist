@@ -1,0 +1,5 @@
+baseurl: https://www.google.es
+
+take_screenshots: true
+screenshot_delay: 1
+browser_width:    1024
