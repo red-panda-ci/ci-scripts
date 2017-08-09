@@ -18,7 +18,7 @@ $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts/common
 
 * Install ci-script stuff into your locally "versioned" ci-scripts/bin folder using one target
 
-- For Android development
+### For Android development
 
 ```
 $ ci-scripts/common/bin/install.sh android
@@ -48,7 +48,7 @@ fastlane/Pluginfile
 fastlane/README.md
 ```
 
-- For Cucumber automated test
+### For Cucumber automated test
 
 ```
 $ ci-scripts/common/bin/install.sh cucumber
@@ -207,11 +207,11 @@ Useful ci stuff for cucumber web automated testing. There is based on the "bddfi
 
 After install ci-script stuff, you should:
 
-* Install vendors
+### Install vendors
 
 Go to ci-scripts/test/cucumber folder and exec 'bundle install' within. This install bddfire vendors, required in cucumber runs
 
-* Modify config file
+### Modify config file
 
 Change config values in ci-scripts/test/cucumber/config.yml.dist file. There is the original content
 
@@ -225,14 +225,14 @@ browser_width:    1024
 ```
 
 There is an explanation of the config variables:
-- baseurl           Referes to url used in some test functions, like "navigate_to".
-- take_screenshots  Set to "true" if you want to save a screenshot on evety test step. The screenshots are located into "ci-scripts/test/cucumber/reports" directory
-- screenshot_delay  How many seconds the test will wait for navigator before take screenshot
-- browser_width     Using poltergeist, width of the viewport in pixels
+* baseurl           Referes to url used in some test functions, like "navigate_to".
+* take_screenshots  Set to "true" if you want to save a screenshot on evety test step. The screenshots are located into "ci-scripts/test/cucumber/reports" directory
+* screenshot_delay  How many seconds the test will wait for navigator before take screenshot
+* browser_width     Using poltergeist, width of the viewport in pixels
 
 Once the config is finished, copy the "config.yml.dist" file to non-versioned one "config.yml" in the same directory
 
-- Change CONTAINER_NAME variable in ci-scripts/test/cucumber/docker.sh
+### Change CONTAINER_NAME variable in ci-scripts/test/cucumber/docker.sh
 
 The aim of this action is to have different container names, one for each project you run on the same Jenkins service (or equivalent continuous integration service)
 
