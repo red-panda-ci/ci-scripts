@@ -18,7 +18,7 @@ $ git submodule add https://github.com/pedroamador/ci-scripts ci-scripts/common
 
 * Install ci-script stuff into your locally "versioned" ci-scripts/bin folder using one target
 
-- For Android development
+### For Android development
 
 ```
 $ ci-scripts/common/bin/install.sh android
@@ -48,7 +48,7 @@ fastlane/Pluginfile
 fastlane/README.md
 ```
 
-- For Cucumber automated test
+### For Cucumber automated test
 
 ```
 $ ci-scripts/common/bin/install.sh cucumber
@@ -83,7 +83,7 @@ Next steps:
 The following file are added from templates to your repository:
 
 ```
-MacBook-Air-de-Infrastructure:mytest pedro.amador$ find ci-scripts/test/
+$ find ci-scripts/test/
 ci-scripts/test/
 ci-scripts/test//cucumber
 ci-scripts/test//cucumber/.relish
@@ -207,11 +207,11 @@ Useful ci stuff for cucumber web automated testing. There is based on the "bddfi
 
 After install ci-script stuff, you should:
 
-* Install vendors
+### Install vendors
 
 Go to ci-scripts/test/cucumber folder and exec 'bundle install' within. This install bddfire vendors, required in cucumber runs
 
-* Modify config file
+### Modify config file
 
 Change config values in ci-scripts/test/cucumber/config.yml.dist file. There is the original content
 
@@ -225,14 +225,14 @@ browser_width:    1024
 ```
 
 There is an explanation of the config variables:
-- baseurl           Referes to url used in some test functions, like "navigate_to".
-- take_screenshots  Set to "true" if you want to save a screenshot on evety test step. The screenshots are located into "ci-scripts/test/cucumber/reports" directory
-- screenshot_delay  How many seconds the test will wait for navigator before take screenshot
-- browser_width     Using poltergeist, width of the viewport in pixels
+* baseurl           Referes to url used in some test functions, like "navigate_to".
+* take_screenshots  Set to "true" if you want to save a screenshot on evety test step. The screenshots are located into "ci-scripts/test/cucumber/reports" directory
+* screenshot_delay  How many seconds the test will wait for navigator before take screenshot
+* browser_width     Using poltergeist, width of the viewport in pixels
 
 Once the config is finished, copy the "config.yml.dist" file to non-versioned one "config.yml" in the same directory
 
-- Change CONTAINER_NAME variable in ci-scripts/test/cucumber/docker.sh
+### Change CONTAINER_NAME variable in ci-scripts/test/cucumber/docker.sh
 
 The aim of this action is to have different container names, one for each project you run on the same Jenkins service (or equivalent continuous integration service)
 
@@ -280,3 +280,11 @@ You can see the result screenshots at ci-scripts/test/cucumber/reports in with t
 
 The same test runs into docker. Test it executing "./docker.sh" in the ci-scripts/test/cucumber directory. You need docker up and running on your workstation. By executing the docker.sh script the contents of ci-scripts/test/cucumber/reports directore is wiped, take care of this.
 
+By default there is no images using "phantomjs" headless browser ('rake poltergeist' task). You can enable it by editing ci-scripts/test/cucumber/features/support/env.rb and searching for "phantomjs_options" 
+
+```
+$ grep phantomjs_options ci-scripts/test/cucumber/features/support/env.rb 
+    phantomjs_options: ['--load-images=no', '--disk-cache=true'],
+```
+
+Edit the file, change the option "yes", save and execute again 'rake poltergeist' into ci-scripts/test/cucumber directory. Then, you have images on ci-scripts/test/cucumber/reports/*.png screenshot files.
