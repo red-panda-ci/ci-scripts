@@ -83,7 +83,7 @@ Next steps:
 The following file are added from templates to your repository:
 
 ```
-MacBook-Air-de-Infrastructure:mytest pedro.amador$ find ci-scripts/test/
+$ find ci-scripts/test/
 ci-scripts/test/
 ci-scripts/test//cucumber
 ci-scripts/test//cucumber/.relish
@@ -280,3 +280,11 @@ You can see the result screenshots at ci-scripts/test/cucumber/reports in with t
 
 The same test runs into docker. Test it executing "./docker.sh" in the ci-scripts/test/cucumber directory. You need docker up and running on your workstation. By executing the docker.sh script the contents of ci-scripts/test/cucumber/reports directore is wiped, take care of this.
 
+By default there is no images using "phantomjs" headless browser ('rake poltergeist' task). You can enable it by editing ci-scripts/test/cucumber/features/support/env.rb and searching for "phantomjs_options" 
+
+```
+$ grep phantomjs_options ci-scripts/test/cucumber/features/support/env.rb 
+    phantomjs_options: ['--load-images=no', '--disk-cache=true'],
+```
+
+Edit the file, change the option "yes", save and execute again 'rake poltergeist' into ci-scripts/test/cucumber directory. Then, you have images on ci-scripts/test/cucumber/reports/*.png screenshot files.
