@@ -67,5 +67,8 @@ ENV LANG=en_US.UTF-8 \
 # FASTLANE STUFF
 RUN gem install fastlane -NV
 
+# Copy debug keystore
+COPY .android/ /root/.android/
+
 # Work directory
 WORKDIR /myApp
