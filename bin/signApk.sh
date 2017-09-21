@@ -7,8 +7,6 @@ Sign apk
 
 Options:
   --sdkVersion=xx.y.z                        # use sdk version xx.y.z
-  --projectName='bash command'               # project name
-  --projectName='bash command'               # project name
   --signingRepository='repository_uri'       # signing repository url, 'git@...'
   --signingPath='path_to_the_sign_elements'  # signing elements path within repository
   --artifactPath='path_to_the_artifact_file' # path to the apk artifact file to be signed
@@ -18,7 +16,6 @@ All options are mandatory
 Example:
   ${signApk} \\
       --sdkVersion='23.0.3' \\
-      --projectName='the-project' \\
       --signingRepository='git@bitbucket.org:company/company-sign-repository.git' \\
       --signingPath='the-project/sign' \\
       --artifactPath='app/build/outputs/apk/app-release-unsigned.apk'
@@ -31,7 +28,6 @@ appFolder="$(pwd)"
 
 # Parse variables
 sdkVersion=""
-projectName=""
 signingRepository=""
 signingPath=""
 artifactPath=""
@@ -39,9 +35,6 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --sdkVersion=*)
       sdkVersion="${1#*=}"
-      ;;
-    --projectName=*)
-      projectName="${1#*=}"
       ;;
     --signingRepository=*)
       signingRepository="${1#*=}"
@@ -68,13 +61,6 @@ done
 if [ "${sdkVersion}" == "" ]
 then
   echo "[ERORR]: you must specify --sdkVersion option"
-  echo
-  echo "${HELP}"
-  exit 1
-fi
-if [ "${projectName}" == "" ]
-then
-  echo "[ERORR]: you must specify --projectName option"
   echo
   echo "${HELP}"
   exit 1
