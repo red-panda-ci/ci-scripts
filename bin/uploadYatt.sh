@@ -13,7 +13,7 @@ version=${3}
 pathFile="${WORKSPACE}/${4}"  # Full path of the application with quotes
 callback_url=${5}             # Callback URL
 pool_id=${6}
-VERSION_NAME=${6}
+VERSION_NAME=${7}
 WORKSPACE=$(pwd)
 
 cd "$(dirname $0)/../.."
