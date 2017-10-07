@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "commitmsg": "validate-commit-msg -p eslint"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "validate-commit": "^3.2.1"
+  }
+}
