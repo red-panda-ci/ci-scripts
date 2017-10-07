@@ -80,6 +80,7 @@ then
   buildDockerImage
   # Execute bash command
   docker run --rm -t -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" bash -c "${command}"
+  rv=$?
 elif [ "${lane}" != "" ]
 then
   buildDockerImage
