@@ -26,7 +26,7 @@ Examples:
   ${buildApk} --sdkVersion=23.0.3 --lane='debug' --notes='develop RC-1'     # build using fastlane
 "
 
-cd "$(dirname $0)/.."
+cd "$(dirname "$0")/.."
 ciRootFolder="$(pwd)"
 cd "../.."
 appFolder="$(pwd)"
