@@ -21,7 +21,7 @@ Example:
       --artifactPath='app/build/outputs/apk/app-release-unsigned.apk'
 "
 
-cd "$(dirname $0)/.."
+cd "$(dirname "$0")/.."
 ciRootFolder="$(pwd)"
 cd "../.."
 appFolder="$(pwd)"
