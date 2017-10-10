@@ -13,7 +13,7 @@ Examples:
   $buildDockerIMage 23.0.3        # Build docer image called 'ci-scripts:23.0.3'
 "
 
-cd "$(dirname $0)/../docker"
+cd "$(dirname "$0")/../docker"
 
 # Parse variables
 sdkversion=""
