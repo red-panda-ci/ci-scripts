@@ -10,7 +10,7 @@ Options:
   --help                      # prints this
 
 Examples:
-  $buildDockerIMage 23.0.3        # Build docer image called 'ci-scripts:23.0.3'
+  $buildDockerIMage 23.0.3    # Build docker image called 'ci-scripts:23.0.3'
 "
 
 cd "$(dirname "$0")/../docker"
@@ -38,7 +38,7 @@ done
 # Check sdk version
 if [ -f ../../../Dockerfile.tail ]
 then
-    cp -p android-emulator/Dockerfile ../../..
+    cp -p android-base/Dockerfile ../../..
     cat ../../../Dockerfile.tail >> ../../../Dockerfile
     dockerImageName="ci-scripts:${sdkVersion}"
     dockerImageFolder="../../.."
@@ -84,8 +84,7 @@ echo "Building docker image"
 echo "- Docker image name...: ${dockerImageName}"
 echo "- Docker image folder.: ${dockerImageFolder}"
 echo "- Build temp folder...: ${buildTempFolder}"
-mkdir -p ${buildTempFolder}/tools ${buildTempFolder}/.android || exit 1
-cp tools/* ${buildTempFolder}/tools || exit 2
+mkdir -p ${buildTempFolder}/.android || exit 1
 cp ${dockerImageFolder}/Dockerfile ${buildTempFolder} || exit 3
 cp ${androidFolder}/* ${buildTempFolder}/.android/ 2> /dev/null || :
 
@@ -93,5 +92,5 @@ cp ${androidFolder}/* ${buildTempFolder}/.android/ 2> /dev/null || :
 docker build -t ${dockerImageName} ${buildTempFolder}
 
 # Remove temporary resources
-rm ${buildTempFolder}/tools/* ${buildTempFolder}/.android/* ${buildTempFolder}/Dockerfile || exit 5
-rmdir ${buildTempFolder}/tools ${buildTempFolder}/.android ${buildTempFolder} || exit 6
+rm ${buildTempFolder}/.android/* ${buildTempFolder}/Dockerfile || exit 5
+rmdir ${buildTempFolder}/.android ${buildTempFolder} || exit 6
