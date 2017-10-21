@@ -31,6 +31,7 @@ pipeline {
             agent { label 'docker' }
             steps {
                 jplDocker(cfg,'redpandaci/android-base', '', 'redpandaci-docker-credentials', 'docker/android-base')
+                jplDocker(cfg,'redpandaci/android-emulator', '', 'redpandaci-docker-credentials', 'docker/android-emulator')
             }
         }
         stage ('Release confirm') {
