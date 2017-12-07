@@ -9,10 +9,10 @@ pipeline {
     agent none
 
     stages {
-        stage ('Build') {
+        stage ('Initialize') {
             agent { label 'docker' }
             steps  {
-                jplCheckoutSCM(cfg)
+                jplStart(cfg)
             }
         }
         stage ('Test') {
@@ -27,13 +27,6 @@ pipeline {
                 jplSonarScanner(cfg)
             }
         }
-        stage('Docker push') {
-            agent { label 'docker' }
-            steps {
-                jplDocker(cfg,'redpandaci/android-base', '', 'redpandaci-docker-credentials', 'docker/android-base')
-                jplDocker(cfg,'redpandaci/android-emulator', '', 'redpandaci-docker-credentials', 'docker/android-emulator')
-            }
-        }
         stage ('Release confirm') {
             when { branch 'release/v*' }
             steps {
@@ -45,13 +38,6 @@ pipeline {
             when { branch 'release/v*' }
             steps {
                 jplCloseRelease(cfg)
-            }
-        }
-        stage ('PR Clean') {
-            agent { label 'docker' }
-            when { branch 'PR-*' }
-            steps {
-                deleteDir()
             }
         }
     }
