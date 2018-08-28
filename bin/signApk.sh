@@ -100,10 +100,10 @@ echo -e "
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${repositoryBasePath}/${signingPath}/keystore.jks -storepass ${STORE_PASSWORD} -keypass ${KEY_PASSWORD} -signedjar ${signedUnalignedArtifactPath} ${artifactPath} ${KEY_ALIAS}
 " '$(find /usr/local/android-sdk/build-tools/ -name zipalign|sort|tail -n1)' " -v -p 4 ${signedUnalignedArtifactPath} ${signedAlignedArtifactPath}
 keytool -list -printcert -jarfile ${signedAlignedArtifactPath}
-" |docker run --rm -i -v "${appFolder}/":/myApp:rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" /bin/bash
+" |docker run -w "${appFolder}/" --rm -i -v "${appFolder}/":"${appFolder}/":rw -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "${sdkVersion}" /bin/bash
 
 rm -rf ${repositoryBasePath}
 
 # Restore permissions
-docker run --rm -t -v "${appFolder}/":/myApp:rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw ci-scripts:"${sdkVersion}" chown -R --reference=Jenkinsfile . || exit $?
+docker run -w "${appFolder}/" --rm -t -v "${appFolder}/":"${appFolder}/":rw  -v "${appFolder}/.gradle":/root/.gradle:rw -v "${appFolder}/.gem":/root/.gem:rw "${sdkVersion}" chown -R --reference=Jenkinsfile . || exit $?
 
