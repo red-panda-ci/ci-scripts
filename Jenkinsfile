@@ -1,6 +1,6 @@
 #!groovy
 
-@Library('github.com/red-panda-ci/jenkins-pipeline-library') _
+@Library('github.com/red-panda-ci/jenkins-pipeline-library@2.6.2') _
 
 // Initialize global config
 cfg = jplConfig('ci-scripts', 'library', '', [hipchat: '', slack: '#integrations', email:'redpandaci+ci-scripts@gmail.com'])
@@ -17,12 +17,13 @@ pipeline {
         }
         stage ('Test') {
             agent { label 'docker' }
+            when { expression { (env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-') } }
             steps  {
-                echo "Volkswagen test type (todo)"
+                sh 'bin/test.sh'
             }
         }
         stage('Sonarqube Analysis') {
-            agent { label 'docker' }
+            when { expression { (env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-') } }
             steps {
                 jplSonarScanner(cfg)
             }
@@ -35,7 +36,7 @@ pipeline {
         }
         stage ('Release finish') {
             agent { label 'docker' }
-            when { branch 'release/v*' }
+            when { expression { env.BRANCH_NAME.startsWith('release/v') && cfg.promoteBuild.enabled } }
             steps {
                 jplCloseRelease(cfg)
             }
