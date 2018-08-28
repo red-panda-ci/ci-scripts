@@ -23,6 +23,7 @@ pipeline {
             }
         }
         stage('Sonarqube Analysis') {
+            agent { label 'docker' }
             when { expression { (env.BRANCH_NAME == 'develop') || env.BRANCH_NAME.startsWith('PR-') } }
             steps {
                 jplSonarScanner(cfg)
