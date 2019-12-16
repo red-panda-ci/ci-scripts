@@ -13,7 +13,7 @@ GEM
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.2.1)
-    excon (0.56.0)
+    excon (0.71.0)
     faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
     faraday-cookie_jar (0.0.6)
@@ -54,7 +54,6 @@ GEM
       xcodeproj (>= 1.4.4, < 2.0.0)
       xcpretty (>= 0.2.4, < 1.0.0)
       xcpretty-travis-formatter (>= 0.0.3)
-    fastlane-plugin-applivery (1.1.1)
     gh_inspector (1.0.3)
     google-api-client (0.9.28)
       addressable (~> 2.3)
@@ -133,7 +132,6 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
-  fastlane-plugin-applivery
 
 BUNDLED WITH
    1.14.6
