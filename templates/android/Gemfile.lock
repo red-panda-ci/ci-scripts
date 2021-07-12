@@ -2,8 +2,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.5)
-    addressable (2.5.1)
-      public_suffix (~> 2.0, >= 2.0.2)
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
     babosa (1.0.2)
     claide (1.0.1)
     colored (1.2)
@@ -54,7 +54,6 @@ GEM
       xcodeproj (>= 1.4.4, < 2.0.0)
       xcpretty (>= 0.2.4, < 1.0.0)
       xcpretty-travis-formatter (>= 0.0.3)
-    fastlane-plugin-applivery (1.1.1)
     gh_inspector (1.0.3)
     google-api-client (0.9.28)
       addressable (~> 2.3)
@@ -95,7 +94,7 @@ GEM
     nanaimo (0.2.3)
     os (0.9.6)
     plist (3.3.0)
-    public_suffix (2.0.5)
+    public_suffix (4.0.6)
     representable (2.3.0)
       uber (~> 0.0.7)
     retriable (2.1.0)
@@ -133,7 +132,6 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
-  fastlane-plugin-applivery
 
 BUNDLED WITH
    1.14.6
